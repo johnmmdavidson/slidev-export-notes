@@ -8,7 +8,7 @@ Each page of the PDF contains two slides stacked vertically, each with its rende
 
 ## Why
 
-Slidev can export slides to PDF, but there's no built-in way to include speaker notes. This tool fills that gap. Useful for:
+Slidev's built-in `export-notes` command exports notes as text only — this tool gives you the slide images alongside your notes for a complete rehearsal document. Useful for:
 
 - Reviewing your talk with notes visible
 - Sharing a presentation with collaborators who need the context

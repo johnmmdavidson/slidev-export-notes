@@ -1,7 +1,7 @@
 {
   "name": "slidev-export-notes",
   "version": "0.1.0",
-  "description": "Export Slidev presentations as PDF with speaker notes",
+  "description": "Export Slidev presentations as PDF with speaker notes — two slides per page with rendered notes alongside",
   "type": "module",
   "bin": {
     "slidev-export-notes": "./bin/cli.js"
@@ -12,6 +12,20 @@
   "engines": {
     "node": ">=18"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnmmdavidson/slidev-export-notes.git"
+  },
+  "homepage": "https://github.com/johnmmdavidson/slidev-export-notes",
+  "keywords": [
+    "slidev",
+    "export",
+    "pdf",
+    "speaker-notes",
+    "presentation",
+    "slides"
+  ],
+  "author": "John Davidson",
   "license": "MIT",
   "dependencies": {
     "commander": "^13.1.0",

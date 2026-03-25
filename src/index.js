@@ -11,6 +11,7 @@ export async function exportNotes(options = {}) {
     slidesFile = 'slides.md',
     output = 'slides-notes.pdf',
     port = 3030,
+    size = 'letter',
     projectDir = process.cwd(),
   } = options;
 
@@ -34,12 +35,12 @@ export async function exportNotes(options = {}) {
 
     // 4. Compose HTML
     console.log('Composing layout...');
-    const html = compose(slides, screenshots);
+    const html = compose(slides, screenshots, { size });
 
     // 5. Render PDF
     const outputPath = path.resolve(projectDir, output);
     console.log('Rendering PDF...');
-    await renderPdf(html, outputPath);
+    await renderPdf(html, outputPath, { size });
 
     console.log(`Done — exported to ${outputPath}`);
   } finally {

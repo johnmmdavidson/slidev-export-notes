@@ -2,11 +2,19 @@ import MarkdownIt from 'markdown-it';
 
 const md = new MarkdownIt();
 
+const PAGE_CONFIG = {
+  letter: { cssSize: 'letter', pageHeight: '10in' },
+  a4: { cssSize: '210mm 297mm', pageHeight: '270mm' },
+};
+
 /**
  * Compose an HTML document with slide images and rendered notes,
  * two slides per page, ready for PDF printing.
  */
-export function compose(slides, screenshots) {
+export function compose(slides, screenshots, options = {}) {
+  const { size = 'letter' } = options;
+  const config = PAGE_CONFIG[size];
+
   const rows = slides.map((slide, i) => {
     const screenshot = screenshots.find((s) => s.index === i);
     const imgSrc = screenshot
@@ -31,17 +39,17 @@ export function compose(slides, screenshots) {
     pages.push(`<div class="page">${pair}\n</div>`);
   }
 
-  return buildHtml(pages.join('\n'));
+  return buildHtml(pages.join('\n'), config);
 }
 
-function buildHtml(body) {
+function buildHtml(body, config) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <style>
   @page {
-    size: letter;
+    size: ${config.cssSize};
     margin: 0.5in;
   }
 
@@ -60,7 +68,7 @@ function buildHtml(body) {
 
   .page {
     page-break-after: always;
-    height: 10in; /* letter height minus margins */
+    height: ${config.pageHeight};
     display: flex;
     flex-direction: column;
     gap: 0.25in;

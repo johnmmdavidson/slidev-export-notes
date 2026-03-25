@@ -1,0 +1,5 @@
+test/
+docs/
+.github/
+*.pdf
+.DS_Store

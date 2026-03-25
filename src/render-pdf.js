@@ -4,7 +4,8 @@ import { chromium } from 'playwright-chromium';
  * Render an HTML string to a PDF file using Playwright.
  * Auto-fits note text by shrinking font size until content fits its container.
  */
-export async function renderPdf(html, outputPath) {
+export async function renderPdf(html, outputPath, options = {}) {
+  const { size = 'letter' } = options;
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
@@ -31,7 +32,7 @@ export async function renderPdf(html, outputPath) {
 
   await page.pdf({
     path: outputPath,
-    format: 'Letter',
+    format: size === 'a4' ? 'A4' : 'Letter',
     printBackground: true,
     margin: { top: '0', right: '0', bottom: '0', left: '0' },
   });

@@ -1,0 +1,138 @@
+import MarkdownIt from 'markdown-it';
+
+const md = new MarkdownIt();
+
+/**
+ * Compose an HTML document with slide images and rendered notes,
+ * two slides per page, ready for PDF printing.
+ */
+export function compose(slides, screenshots) {
+  const rows = slides.map((slide, i) => {
+    const screenshot = screenshots.find((s) => s.index === i);
+    const imgSrc = screenshot
+      ? `data:image/png;base64,${screenshot.buffer.toString('base64')}`
+      : '';
+    const renderedNote = slide.note ? md.render(slide.note) : '<p class="empty-note">No notes</p>';
+
+    return `
+      <div class="slide-row">
+        <div class="slide-image">
+          <div class="slide-label">Slide ${i + 1}</div>
+          <img src="${imgSrc}" alt="Slide ${i + 1}" />
+        </div>
+        <div class="slide-notes">${renderedNote}</div>
+      </div>`;
+  });
+
+  // Group rows into pairs (two per page)
+  const pages = [];
+  for (let i = 0; i < rows.length; i += 2) {
+    const pair = rows.slice(i, i + 2).join('\n');
+    pages.push(`<div class="page">${pair}\n</div>`);
+  }
+
+  return buildHtml(pages.join('\n'));
+}
+
+function buildHtml(body) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4;
+    color: #222;
+  }
+
+  .page {
+    page-break-after: always;
+    height: 10in; /* letter height minus margins */
+    display: flex;
+    flex-direction: column;
+    gap: 0.25in;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+  }
+
+  .slide-row {
+    display: flex;
+    flex: 1;
+    gap: 0.2in;
+    min-height: 0;
+  }
+
+  .slide-image {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide-label {
+    font-size: 8pt;
+    color: #999;
+    margin-bottom: 2pt;
+  }
+
+  .slide-image img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    display: block;
+  }
+
+  .slide-notes {
+    width: 45%;
+    border-left: 2px solid #e0e0e0;
+    padding-left: 0.15in;
+    overflow: hidden;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+
+  .slide-notes p {
+    margin-bottom: 0.5em;
+  }
+
+  .slide-notes ul, .slide-notes ol {
+    margin-left: 1.2em;
+    margin-bottom: 0.5em;
+  }
+
+  .slide-notes code {
+    font-size: 9pt;
+    background: #f5f5f5;
+    padding: 1px 3px;
+    border-radius: 2px;
+  }
+
+  .slide-notes a {
+    color: #2563eb;
+  }
+
+  .empty-note {
+    color: #bbb;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+${body}
+</body>
+</html>`;
+}

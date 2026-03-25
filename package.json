@@ -1,0 +1,24 @@
+{
+  "name": "slidev-export-notes",
+  "version": "0.1.0",
+  "description": "Export Slidev presentations as PDF with speaker notes",
+  "type": "module",
+  "bin": {
+    "slidev-export-notes": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^13.1.0",
+    "markdown-it": "^14.1.0",
+    "playwright-chromium": "^1.52.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1"
+  }
+}

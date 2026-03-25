@@ -20,7 +20,7 @@ export function compose(slides, screenshots) {
           <div class="slide-label">Slide ${i + 1}</div>
           <img src="${imgSrc}" alt="Slide ${i + 1}" />
         </div>
-        <div class="slide-notes">${renderedNote}</div>
+        <div class="slide-notes"><div class="notes-inner">${renderedNote}</div></div>
       </div>`;
   });
 
@@ -100,9 +100,18 @@ function buildHtml(body) {
     width: 45%;
     border-left: 2px solid #e0e0e0;
     padding-left: 0.15in;
+    position: relative;
     overflow: hidden;
     font-size: 10pt;
     line-height: 1.4;
+  }
+
+  .notes-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-left: 0.15in;
   }
 
   .slide-notes p {
